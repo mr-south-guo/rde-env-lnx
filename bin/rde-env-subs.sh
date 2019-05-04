@@ -143,8 +143,11 @@ Sub_ProcessDesktop() {
     # mkdir -p ${DESKTOP_TMP_DIR}
     cp "${RDE_APP_SRC_DIR}"/*.desktop "${DESKTOP_TMP_DIR}"/
 
+    # Prepend ${RDE_ENV_NAME}.
+    sed -i -e "s,^Name=,Name=(${RDE_ENV_NAME}) ," "${DESKTOP_TMP_DIR}"/*.desktop
+
     # Prepend ${RDE_APP_MOUNT_POINT}. `TryExec` key is for checking only.
-    sed -i -e "s,^TryExec=,TryExec=${RDE_APP_MOUNT_POINT}/," "${DESKTOP_TMP_DIR}"/*.desktop
+    sed -i -e "s,^TryExec\(=./\|=/\|=\)\(.*\),TryExec=${RDE_APP_MOUNT_POINT}/," "${DESKTOP_TMP_DIR}"/*.desktop
 
     # Source the ${RDE_ENV_SETENV_FILE} first, and prepend ${RDE_APP_MOUNT_POINT} to the executable.
     sed -i -e "s,^Exec\(=./\|=/\|=\)\(.*\),Exec=/bin/bash -c \". ${RDE_ENV_SETENV_FILE}; ${RDE_APP_MOUNT_POINT}/\2\"," "${DESKTOP_TMP_DIR}"/*.desktop
@@ -153,7 +156,8 @@ Sub_ProcessDesktop() {
     sed -i -e "s,^Icon\(=./\|=/\|=\),Icon=${RDE_APP_MOUNT_POINT}/," "${DESKTOP_TMP_DIR}"/*.desktop
 
     # Copy the processed desktop files to Desktop and clean up the temp directory.
-    cp "${DESKTOP_TMP_DIR}"/*.desktop "${HOME}/Desktop/${RDE_ENV_NAME}"/
+    cp "${DESKTOP_TMP_DIR}"/*.desktop "${RDE_ENV_DESKTOP_DIR1}"/
+    cp "${DESKTOP_TMP_DIR}"/*.desktop "${RDE_ENV_DESKTOP_DIR2}"/
     rm -r "${DESKTOP_TMP_DIR}"
   fi
 }

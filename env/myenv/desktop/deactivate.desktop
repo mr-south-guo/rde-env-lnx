@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=RDE-Env Deactivate
-Comment=RDE-Env Deactivate
+Name=Deactivate
+Comment=Deactivate
 Icon=icons/rde-env-disable.png
 Exec=deactivate
 Path=~

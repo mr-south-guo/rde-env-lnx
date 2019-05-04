@@ -19,6 +19,11 @@ Sub_SetSetEnvFile
 # Apply config for the current RDE-ENV (may override above variables)
 . ${RDE_ENV_HOME}/etc/rde-env.conf
 
+# DIR1: allow apps to be shown in desktop menu and application finder
+RDE_ENV_DESKTOP_DIR1=${HOME}/.local/share/applications/${RDE_ENV_NAME}
+# DIR2: for easy asscess and in case DIR1 is not picked up by some desktop
+RDE_ENV_DESKTOP_DIR2=${HOME}/Desktop/${RDE_ENV_NAME}
+
 case "${RDE_ENV_ACTION}" in
   activate)
     Sub_SetXTermTitle "${RDE_ENV_NAME}:${RDE_ENV_ACTION}"
@@ -26,7 +31,8 @@ case "${RDE_ENV_ACTION}" in
     if [ -e "${RDE_ENV_SETENV_FILE}" ]; then
       rm "${RDE_ENV_SETENV_FILE}"
     fi
-    mkdir -p "${HOME}/Desktop/${RDE_ENV_NAME}"
+    mkdir -p "${RDE_ENV_DESKTOP_DIR1}"
+    mkdir -p "${RDE_ENV_DESKTOP_DIR2}"
     Sub_SetAllApps
     ;;
   deactivate)
@@ -34,7 +40,8 @@ case "${RDE_ENV_ACTION}" in
     Sub_EchoHeading2 "${RDE_ENV_NAME}" "${RDE_ENV_ACTION}"
     Sub_SetAllApps
     rm "${RDE_ENV_SETENV_FILE}"
-    rm -r "${HOME}/Desktop/${RDE_ENV_NAME}"
+    rm -r "${RDE_ENV_DESKTOP_DIR1}"
+    rm -r "${RDE_ENV_DESKTOP_DIR2}"
     ;;
   terminal)
     RDE_SHELL_RC="\
@@ -57,4 +64,3 @@ case "${RDE_ENV_ACTION}" in
 esac
 
 read -p "Press [Enter] key to continue..."
-
