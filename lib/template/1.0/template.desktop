@@ -1,0 +1,15 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Application
+Name=App Template
+Comment=App Template
+Terminal=true
+Path=~
+
+# The path in the following entries
+# - the starting "/" or "./" will be removed if present
+# - it will be prepended by the app's mount point ${RDE_APP_MOUNT_POINT} 
+Icon=/icons/template.svg
+Exec=/bin/template.sh
+TryExec=/bin/template.sh
+
