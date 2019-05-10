@@ -2,10 +2,11 @@
 
 ###
 # Activate/Deactivate script for RDE-Env App
-# - To enable this script: copy this script to <root>/env/<env-name>/.enable/
+# version: 1.0
+# - To enable corresponding app: copy this script to <root>/env/<env-name>/.enable/
 # - The following variables are provided by the caller script:
 #    - ${RDE_APP_MOUNT_ROOT} : the common root all this env's apps may be mount to
-#    - ${RDE_ENV_LIB} : the <root>/lib/ directory where all the apps' files located
+#    - ${RDE_ENV_LIB} : the <root>/lib/ directory where all apps' files located
 ###
 
 RDE_APP_NAME=template
@@ -13,10 +14,10 @@ RDE_APP_SUFFIX=1.0
 
 ## The following path are recommended, but can be changed if needed
 
-# Some apps require a fixed mount point (e.g. "/opt/app-name")
+# Where to mount this app
 RDE_APP_MOUNT_POINT=${RDE_APP_MOUNT_ROOT}/${RDE_APP_NAME}-${RDE_APP_SUFFIX}
 
-# This is where the *.desktop files located
+# Where this app's *.desktop files located
 RDE_APP_SRC_DIR=${RDE_ENV_LIB}/${RDE_APP_NAME}/${RDE_APP_SUFFIX}
 
 # This is where the app's main body located
@@ -31,7 +32,7 @@ case "${RDE_ENV_ACTION}" in
     Sub_Mount "${RDE_APP_IMAGE}" "${RDE_APP_MOUNT_POINT}"
     
     # Process all the *.desktop files, so that they will point to
-    # the proper app's mount points. Also, they will source the env's setup
+    # the proper app's mount point. Also, they will source the env's setup
     # script before launching the apps.
     Sub_ProcessDesktop
     
