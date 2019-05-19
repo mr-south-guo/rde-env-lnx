@@ -1,0 +1,14 @@
+#!/bin/bash
+
+SCRIPTFULLPATH=$( readlink -f $BASH_SOURCE )
+
+# This script name is also the action.
+RDE_ENV_ACTION=${SCRIPTFULLPATH##*/}
+RDE_ENV_HOME=${SCRIPTFULLPATH%/*}
+RDE_ENV_BINPATH=$( readlink -f "${RDE_ENV_HOME}/../../bin" )
+
+if [[ -t 0 ]]; then
+    "${RDE_ENV_BINPATH}/rde-env-action.sh" "${RDE_ENV_HOME}" ${RDE_ENV_ACTION}
+else
+    x-terminal-emulator -e "${RDE_ENV_BINPATH}/rde-env-action.sh" "${RDE_ENV_HOME}" ${RDE_ENV_ACTION}
+fi

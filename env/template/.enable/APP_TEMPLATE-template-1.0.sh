@@ -1,0 +1,1 @@
+../../../lib/template/1.0/APP_TEMPLATE-template-1.0.sh

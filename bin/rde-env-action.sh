@@ -24,10 +24,11 @@ RDE_ENV_DESKTOP_DIR1=${HOME}/.local/share/applications/${RDE_ENV_NAME}
 # DIR2: for easy asscess and in case DIR1 is not picked up by some desktop
 RDE_ENV_DESKTOP_DIR2=${HOME}/Desktop/${RDE_ENV_NAME}
 
+Sub_SetXTermTitle "${RDE_ENV_NAME}:${RDE_ENV_ACTION}"
+Sub_EchoHeading1 "${RDE_ENV_NAME}" "${RDE_ENV_ACTION}"
+
 case "${RDE_ENV_ACTION}" in
   activate)
-    Sub_SetXTermTitle "${RDE_ENV_NAME}:${RDE_ENV_ACTION}"
-    Sub_EchoHeading1 "${RDE_ENV_NAME}" "${RDE_ENV_ACTION}"
     if [ -e "${RDE_ENV_SETENV_FILE}" ]; then
       rm "${RDE_ENV_SETENV_FILE}"
     fi
@@ -36,8 +37,6 @@ case "${RDE_ENV_ACTION}" in
     Sub_SetAllApps
     ;;
   deactivate)
-    Sub_SetXTermTitle "${RDE_ENV_NAME}:${RDE_ENV_ACTION}" 
-    Sub_EchoHeading2 "${RDE_ENV_NAME}" "${RDE_ENV_ACTION}"
     Sub_SetAllApps
     rm "${RDE_ENV_SETENV_FILE}"
     rm -r "${RDE_ENV_DESKTOP_DIR1}"
@@ -58,9 +57,24 @@ case "${RDE_ENV_ACTION}" in
     # Start a new bash shell.
     /bin/bash --rcfile <(echo ${RDE_SHELL_RC})
     ;;
+  .scan-apps)
+    # Prepare the .app directory
+    RDE_ENV_APPS=${RDE_ENV_HOME}/.apps
+    mkdir -p "${RDE_ENV_APPS}"
+    rm -f "${RDE_ENV_APPS}"/*
+
+    # Link all 'APP_*.sh' files to the .app directory
+    find "${RDE_ENV_LIB}" -maxdepth 3 -name APP_*.sh -type f \
+      -printf "%h/%f ${RDE_ENV_APPS}/%f " | xargs -d\  -n2 ln -rs
+
+    log_msg "[INF] The following apps are linked to '${RDE_ENV_APPS}/'"
+    ls -1 ${RDE_ENV_APPS}
+    log_msg "[INF] You can move them into '${RDE_ENV_HOME}/.enable/' to enable them."
+    ;;
   *)
     log_msg "[ERR] I don't understand: RDE_ENV_ACTION=${RDE_ENV_ACTION}"
     ;;
 esac
 
-read -p "Press [Enter] key to continue..."
+echo ""
+Sub_Pause
