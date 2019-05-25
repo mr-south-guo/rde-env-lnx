@@ -2,11 +2,10 @@
 
 SCRIPTFULLPATH=$( readlink -f "$BASH_SOURCE" )
 THIS=${SCRIPTFULLPATH##*/}
-RDE_ENV_BINPATH=${SCRIPTFULLPATH%/*}
-. "${RDE_ENV_BINPATH}/rde-env-subs.sh"
+. "${SCRIPTFULLPATH%/*}/rde-subs.sh"
 
 HELP_MSG="\
-RDE-Env Utility: Make a SquashFs file
+RDE Utility: Make a SquashFs file
 Usage:
 ${THIS} -h 
 ${THIS} -i <input> -o <output>

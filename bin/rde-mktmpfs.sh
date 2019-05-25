@@ -2,11 +2,10 @@
 
 SCRIPTFULLPATH=$( readlink -f "$BASH_SOURCE" )
 THIS=${SCRIPTFULLPATH##*/}
-RDE_ENV_BINPATH=${SCRIPTFULLPATH%/*}
-. "${RDE_ENV_BINPATH}/rde-env-subs.sh"
+. "${SCRIPTFULLPATH%/*}/rde-subs.sh"
 
 HELP_MSG="\
-RDE-Env Utility: Make a tmpfs ramdisk
+RDE Utility: Make a tmpfs ramdisk
 Usage:
 ${THIS} -h 
 ${THIS} -s <size> -m <mountpoint>
@@ -30,7 +29,7 @@ while getopts ':hs:m:' option; do
        echo "${HELP_MSG}"
        exit 1
        ;;
-   \?) plog_msg "[ERR] Illegal option: -${OPTARG}"
+   \?) log_msg "[ERR] Illegal option: -${OPTARG}"
        echo "${HELP_MSG}"
        exit 1
        ;;
@@ -45,9 +44,6 @@ if [ -z "${IMAGE_FILE_SIZE}" ] || [ -z "${MOUNT_POINT}" ]; then
 fi
 
 Sub_PrepareEmptyDir "${MOUNT_POINT}"
-if [ $? -gt 0 ]; then
-  log_msg "[ERR] Aborted."
-  exit 1
-fi
+Sub_IfErrExit
 
 sudo mount -t tmpfs tmpfs "${MOUNT_POINT}" -o defaults,size=${IMAGE_FILE_SIZE}
