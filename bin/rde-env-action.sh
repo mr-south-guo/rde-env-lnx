@@ -51,13 +51,13 @@ case "${RDE_ENV_ACTION}" in
     if [ -e ${RDE_ENV_SETENV_FILE} ]; then
       RDE_SHELL_RC="${RDE_SHELL_RC};source \"${RDE_ENV_SETENV_FILE}\""
     else
-      log_msg "[WRN] ${RDE_ENV_SETENV_FILE} does not exist. Not yet activated?"
+      log_msg "[WRN] '${RDE_ENV_SETENV_FILE}' not found. Env is not activated?"
     fi
   
     # Start a new bash shell.
     /bin/bash --rcfile <(echo ${RDE_SHELL_RC})
     ;;
-  .scan-apps)
+  .scan-lib-for-apps)
     # Prepare the .app directory
     RDE_ENV_APPS=${RDE_ENV_HOME}/.apps
     mkdir -p "${RDE_ENV_APPS}"
@@ -69,7 +69,7 @@ case "${RDE_ENV_ACTION}" in
 
     log_msg "[INF] The following apps are linked to '${RDE_ENV_APPS}/'"
     ls -1 ${RDE_ENV_APPS}
-    log_msg "[INF] You can move them into '${RDE_ENV_HOME}/.enable/' to enable them."
+    log_msg "[INF] Move them into '${RDE_ENV_HOME}/.enable/' to enable them."
     ;;
   *)
     log_msg "[ERR] I don't understand: RDE_ENV_ACTION=${RDE_ENV_ACTION}"

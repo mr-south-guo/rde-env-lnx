@@ -2,13 +2,30 @@
 
 SCRIPTFULLPATH=$( readlink -f $BASH_SOURCE )
 
-# This script name is also the action.
+# Use this script's name as the action.
 RDE_ENV_ACTION=${SCRIPTFULLPATH##*/}
+
+# The root directory of this env.
 RDE_ENV_HOME=${SCRIPTFULLPATH%/*}
+
+# The bin directory of the parent (not this env).
 RDE_ENV_BINPATH=$( readlink -f "${RDE_ENV_HOME}/../../bin" )
 
-if [[ -t 0 ]]; then
-    "${RDE_ENV_BINPATH}/rde-env-action.sh" "${RDE_ENV_HOME}" ${RDE_ENV_ACTION}
-else
-    x-terminal-emulator -e "${RDE_ENV_BINPATH}/rde-env-action.sh" "${RDE_ENV_HOME}" ${RDE_ENV_ACTION}
+# Command to take action.
+CMD_STRING="${RDE_ENV_BINPATH}/rde-env-action.sh ${RDE_ENV_HOME} ${RDE_ENV_ACTION}"
+
+# Is the action 'terminal'?
+if [[ "${RDE_ENV_ACTION}" = terminal ]]; then
+  # Do we have tmux and not inside it? (Ref: https://unix.stackexchange.com/a/113768)
+  if command -v tmux &> /dev/null && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+    CMD_STRING="tmux set-option -g default-command '${CMD_STRING}' \; new-session"
+  fi
 fi
+
+# Check if we are in an non-interactive shell.
+if [[ -z PS1 ]]; then
+  CMD_STRING="x-terminal-emulator -e '${CMD_STRING}'"
+fi
+
+eval ${CMD_STRING}
+
