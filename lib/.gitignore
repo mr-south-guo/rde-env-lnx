@@ -2,8 +2,8 @@
 !.gitignore
 !/template/
 
-## Exclude /misc/this-env
 !/misc/
 /misc/*
 !/misc/this-env/
+!/misc/utils-lnx64/
 

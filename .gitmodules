@@ -1,0 +1,3 @@
+[submodule "lib/misc/utils-lnx64"]
+	path = lib/misc/utils-lnx64
+	url = https://github.com/mr-south-guo/utils-lnx64.git
