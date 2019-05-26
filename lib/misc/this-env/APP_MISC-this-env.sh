@@ -17,6 +17,13 @@ RDE_APP_SRC_DIR=${RDE_ENV_LIB}/${RDE_APP_NAME}/${RDE_APP_SUFFIX}
 case "${RDE_ENV_ACTION}" in
   activate)
     Sub_ProcessDesktop
+    Sub_AppendToSetEnvFile "
+## Misc: this-env
+# These two variables are used by deactivate action.
+# Setting them here to avoid \$HOME change.
+export RDE_ENV_DESKTOP_DIR1=${RDE_ENV_DESKTOP_DIR1}
+export RDE_ENV_DESKTOP_DIR2=${RDE_ENV_DESKTOP_DIR2}
+"
     ;;
   deactivate)
     echo "Nothing to do." > /dev/null

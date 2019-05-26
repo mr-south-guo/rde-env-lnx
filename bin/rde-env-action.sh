@@ -20,9 +20,10 @@ Sub_SetSetEnvFile
 . ${RDE_ENV_HOME}/etc/rde-env.conf
 
 # DIR1: allow apps to be shown in desktop menu and application finder
-RDE_ENV_DESKTOP_DIR1=${HOME}/.local/share/applications/${RDE_ENV_NAME}
 # DIR2: for easy asscess and in case DIR1 is not picked up by some desktop
-RDE_ENV_DESKTOP_DIR2=${HOME}/Desktop/${RDE_ENV_NAME}
+# Set them to default location if not set. (lib/misc/this-env will set it for avoid $HOME changes.) 
+[[ ! ${RDE_ENV_DESKTOP_DIR1} ]] && RDE_ENV_DESKTOP_DIR1=${HOME}/.local/share/applications/${RDE_ENV_NAME}
+[[ ! ${RDE_ENV_DESKTOP_DIR2} ]] && RDE_ENV_DESKTOP_DIR2=${HOME}/Desktop/${RDE_ENV_NAME}
 
 Sub_SetXTermTitle "${RDE_ENV_NAME}:${RDE_ENV_ACTION}"
 Sub_EchoHeading1 "${RDE_ENV_NAME}" "${RDE_ENV_ACTION}"
