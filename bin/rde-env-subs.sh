@@ -93,6 +93,30 @@ Sub_Mount() {
   return $?
 }
 
+Sub_KillByPattern() {
+  local PATTERN=$1
+	
+  local CMD_STRING="pgrep -f ${PATTERN}"
+  if ${CMD_STRING} &> /dev/null; then
+    log_msg "[WRN] - Terminating processes running from '${PATTERN}'"
+    pkill -f ${PATTERN}
+    sleep 0.5
+    while ${CMD_STRING} &> /dev/null; do
+      sleep 0.5
+    done
+  fi
+  
+  CMD_STRING="lsof -t ${PATTERN}"
+  if ${CMD_STRING} &> /dev/null; then
+    log_msg "[WRN] - Terminating processes opening '${PATTERN}'"
+    kill `${CMD_STRING}`
+    sleep 0.5
+    while ${CMD_STRING} &> /dev/null; do
+      sleep 0.5
+    done
+  fi
+}
+
 Sub_Unmount() {
   local MOUNT_POINT=$1
 
@@ -104,3 +128,4 @@ Sub_Unmount() {
     log_msg "[WRN] ${MOUNT_POINT} is not a mountpoint. No need to unmount."
   fi
 }
+
