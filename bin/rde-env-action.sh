@@ -1,18 +1,17 @@
 #!/bin/bash
 
 ## Setup environment
-## $1 - The title of the RDE-ENV
-## $2 - The HOME directory of the RDE-ENV
-## $3 - Action: enable, disable, terminal
+## $1 - The HOME directory of the RDE-Env
+## $2 - Action: enable, disable, terminal
 
 SCRIPTFULLPATH=$( readlink -f "$BASH_SOURCE" )
 RDE_ENV_BINPATH=${SCRIPTFULLPATH%/*}
 . "${RDE_ENV_BINPATH}/rde-env-subs.sh"
 
 # Set some basic RDE-ENV level variables
-RDE_ENV_HOME=$1
-RDE_ENV_ACTION=$2
-RDE_ENV_LIB=$( readlink -f "${RDE_ENV_HOME}/../../lib" )
+export RDE_ENV_HOME=$1
+export RDE_ENV_ACTION=$2
+export RDE_ENV_LIB=$( readlink -f "${RDE_ENV_HOME}/../../lib" )
 export PATH=${RDE_ENV_BINPATH}:${RDE_ENV_HOME}/bin:${PATH}
 Sub_SetSetEnvFile
 
