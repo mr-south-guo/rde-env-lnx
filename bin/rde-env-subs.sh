@@ -17,16 +17,19 @@ Sub_ProcessDesktop() {
     # mkdir -p ${DESKTOP_TMP_DIR}
     cp "${RDE_APP_SRC_DIR}"/*.desktop "${DESKTOP_TMP_DIR}"/
 
-    # Prepend ${RDE_ENV_NAME}.
+    # `Name=`: Prepend ${RDE_ENV_NAME}.
     sed -i -e "s,^Name=,Name=(${RDE_ENV_NAME}) ," "${DESKTOP_TMP_DIR}"/*.desktop
 
-    # Prepend ${RDE_APP_MOUNT_POINT}. `TryExec` key is for checking only.
+    # `TryExec=`: Prepend ${RDE_APP_MOUNT_POINT}.
     sed -i -e "s,^TryExec\(=./\|=/\|=\)\(.*\),TryExec=${RDE_APP_MOUNT_POINT}/," "${DESKTOP_TMP_DIR}"/*.desktop
 
-    # Source the ${RDE_ENV_SETENV_FILE} first, and prepend ${RDE_APP_MOUNT_POINT} to the executable.
-    sed -i -e "s,^Exec\(=./\|=/\|=\)\(.*\),Exec=/bin/bash -c \". ${RDE_ENV_SETENV_FILE}; ${RDE_APP_MOUNT_POINT}/\2\"," "${DESKTOP_TMP_DIR}"/*.desktop
+    # `Exec=`: Source the ${RDE_ENV_SETENV_FILE} first, and prepend ${RDE_APP_MOUNT_POINT} to the executable.
+    sed -i -e "s,^Exec\(=./\|=/\|=\)\(.*\),Exec=/bin/bash -c \". ${RDE_ENV_SETENV_FILE}; cd ~; ${RDE_APP_MOUNT_POINT}/\2\"," "${DESKTOP_TMP_DIR}"/*.desktop
 
-    # Prepend ${RDE_APP_MOUNT_POINT} to the icon file.
+    # `BareExec=`: Replace as `Exec=` and prepend ${RDE_APP_MOUNT_POINT} to the executable.
+    sed -i -e "s,^BareExec\(=./\|=/\|=\)\(.*\),Exec=${RDE_APP_MOUNT_POINT}/\2," "${DESKTOP_TMP_DIR}"/*.desktop
+
+    # `Icon=`: Prepend ${RDE_APP_MOUNT_POINT} to the icon file.
     sed -i -e "s,^Icon\(=./\|=/\|=\),Icon=${RDE_APP_MOUNT_POINT}/," "${DESKTOP_TMP_DIR}"/*.desktop
 
     # Copy the processed desktop files to Desktop and clean up the temp directory.
@@ -95,7 +98,7 @@ Sub_Mount() {
 
 Sub_KillByPattern() {
   local PATTERN=$1
-	
+
   local CMD_STRING="pgrep -f ${PATTERN}"
   if ${CMD_STRING} &> /dev/null; then
     log_msg "[WRN] - Terminating processes running from '${PATTERN}'"
@@ -105,7 +108,7 @@ Sub_KillByPattern() {
       sleep 0.5
     done
   fi
-  
+
   CMD_STRING="lsof -t ${PATTERN}"
   if ${CMD_STRING} &> /dev/null; then
     log_msg "[WRN] - Terminating processes opening '${PATTERN}'"
@@ -128,4 +131,3 @@ Sub_Unmount() {
     log_msg "[WRN] ${MOUNT_POINT} is not a mountpoint. No need to unmount."
   fi
 }
-

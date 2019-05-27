@@ -1,8 +1,15 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=Deactivate
-Comment=Deactivate
+Name=......deactivate
+Comment=Deactivate this RDE-Env
 Icon=icons/rde-env-disable.png
-Exec=deactivate
 Terminal=true
+
+# `BareExec=path-to-executable` is not a standard entry.
+# rde-env's activate action will do the following:
+# - Prepend `path-to-executable` with ${RDE_APP_MOUNT_POINT}
+# - Change `BareExec` to `Exec` 
+BareExec=deactivate
+# Note: deactivate must use `BareExec` instead of `Exec`, otherwise the deactivation processes may kill itself because of `cd ~` and 'lib/misc/home-xxx'
+

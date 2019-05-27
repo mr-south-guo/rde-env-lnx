@@ -1,8 +1,8 @@
 [Desktop Entry]
 Encoding=UTF-8
 Type=Application
-Name=Terminal
-Comment=Terminal
+Name=......terminal
+Comment=Terminal of this RDE-Env
 Icon=icons/rde-env-terminal.png
 Exec=terminal
 Terminal=true
