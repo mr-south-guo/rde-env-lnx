@@ -16,13 +16,14 @@ RDE_ENV_BINPATH=$( readlink -f "${RDE_ENV_HOME}/../../bin" )
 # Command to take action.
 CMD_STRING="${RDE_ENV_BINPATH}/rde-env-action.sh ${RDE_ENV_HOME} ${RDE_ENV_ACTION}"
 
+# TODO: Need to fix the OS clipboard integration. Disable auto tmux for now.
 # Is the action 'terminal'?
-if [[ "${RDE_ENV_ACTION}" = terminal ]]; then
-  # Do we have tmux and not inside it? (Ref: https://unix.stackexchange.com/a/113768)
-  if command -v tmux &> /dev/null && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
-    CMD_STRING="tmux set-option -g default-command '${CMD_STRING}' \; new-session"
-  fi
-fi
+#if [[ "${RDE_ENV_ACTION}" = terminal ]]; then
+#  # Do we have tmux and not inside it? (Ref: https://unix.stackexchange.com/a/113768)
+#  if command -v tmux &> /dev/null && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
+#    CMD_STRING="tmux set-option -g default-command '${CMD_STRING}' \; new-session"
+#  fi
+#fi
 
 # Check if we are in an non-interactive shell.
 # TODO: `if [[ -t 0 ]]; then` seems to work better with desktop file when `Terminal=false`, but it still has some strangeness.
